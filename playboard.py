@@ -8,6 +8,7 @@
 import tkinter #To introduce GUI elements.
 
 import hazard #To test for hazards.
+import initial_spot #To test for the initial spots.
 import play_state #To track the current turn state.
 
 class PlayBoard:
@@ -61,3 +62,7 @@ class PlayBoard:
 				if self.play_state == play_state.PlayState.TURN:
 					if self.board[x][y] is None:
 						self.board_gui[x][y].config(state=tkinter.DISABLED) #TODO
+
+				if self.play_state == play_state.PlayState.SETUP:
+					if not isinstance(self.board[x][y], initial_spot.InitialSpot) or self.board[x][y].is_ai:
+						self.board_gui[x][y].config(state=tkinter.DISABLED) #Only allow places where the user can place anything.

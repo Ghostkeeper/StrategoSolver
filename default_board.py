@@ -6,6 +6,7 @@
 #You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import hazard #To place hazards on the board.
+import initial_spot #To determine the initial spots for both players.
 import playboard #We're inheriting from PlayBoard.
 
 class DefaultBoard(playboard.PlayBoard):
@@ -25,3 +26,13 @@ class DefaultBoard(playboard.PlayBoard):
 		self.board[6][5] = hazard.Hazard()
 		self.board[7][4] = hazard.Hazard()
 		self.board[7][5] = hazard.Hazard()
+
+		#Placement for the player.
+		for x in range(0, len(self.board)):
+			for y in range(6, 10):
+				self.board[x][y] = initial_spot.InitialSpot()
+
+		#Placement for the AI.
+		for x in range(0, len(self.board)):
+			for y in range(0, 4):
+				self.board[x][y] = initial_spot.InitialSpot(is_ai=True)
