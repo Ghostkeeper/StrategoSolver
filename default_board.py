@@ -8,6 +8,7 @@
 import hazard #To place hazards on the board.
 import initial_spot #To determine the initial spots for both players.
 import playboard #We're inheriting from PlayBoard.
+import rank #To initialise the number of pieces per rank.
 
 class DefaultBoard(playboard.PlayBoard):
 	"""
@@ -38,15 +39,15 @@ class DefaultBoard(playboard.PlayBoard):
 				self.board[x][y] = initial_spot.InitialSpot(is_ai=True)
 
 		#How many of each piece a player gets.
-		self.num_pieces[0] = 6 #Bombs.
-		self.num_pieces[1] = 1 #Spies.
-		self.num_pieces[2] = 8 #Scouts.
-		self.num_pieces[3] = 5 #Miners.
-		self.num_pieces[4] = 4 #Sergeants.
-		self.num_pieces[5] = 4 #Lieutenants.
-		self.num_pieces[6] = 4 #Captains.
-		self.num_pieces[7] = 3 #Majors.
-		self.num_pieces[8] = 2 #Colonels.
-		self.num_pieces[9] = 1 #Generals.
-		self.num_pieces[10] = 1 #Marshalls.
-		self.num_pieces[11] = 1 #Flags.
+		self.num_pieces[rank.Rank.BOMB] = 6
+		self.num_pieces[rank.Rank.SPY] = 1
+		self.num_pieces[rank.Rank.SCOUT] = 8
+		self.num_pieces[rank.Rank.MINER] = 5
+		self.num_pieces[rank.Rank.SERGEANT] = 4
+		self.num_pieces[rank.Rank.LIEUTENANT] = 4
+		self.num_pieces[rank.Rank.CAPTAIN] = 4
+		self.num_pieces[rank.Rank.MAJOR] = 3
+		self.num_pieces[rank.Rank.COLONEL] = 2
+		self.num_pieces[rank.Rank.GENERAL] = 1
+		self.num_pieces[rank.Rank.MARSHALL] = 1
+		self.num_pieces[rank.Rank.FLAG] = 1
