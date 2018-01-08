@@ -7,6 +7,8 @@
 
 import tkinter #To introduce GUI elements.
 
+import hazard #To test for hazards.
+
 class PlayBoard:
 	"""
 	A data class that represents the current state of the game.
@@ -23,6 +25,7 @@ class PlayBoard:
 		self.board_settings()
 
 		self.build_board()
+		self.display()
 
 	def board_settings(self):
 		"""
@@ -40,3 +43,17 @@ class PlayBoard:
 
 		#The board, containing pieces or blocking parts.
 		self.board = [[None for i in range(0, self.height)] for i in range(0, self.width)]
+		self.board_gui = [[None for i in range(0, self.height)] for i in range(0, self.width)]
+
+	def display(self):
+		"""
+		Puts the current state of the board on the display.
+		"""
+		for x in range(0, len(self.board)):
+			for y in range(0, len(self.board[x])):
+				if isinstance(self.board[x][y], hazard.Hazard):
+					continue #Leave this cell empty.
+				self.board_gui[x][y] = tkinter.Button(width=1, height=1, text=" ")
+				self.board_gui[x][y].grid(column=x, row=y)
+				if self.board[x][y] is None:
+					self.board_gui[x][y].config(state=tkinter.DISABLED) #Cells without a piece in it are disabled.
