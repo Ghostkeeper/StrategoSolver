@@ -5,12 +5,23 @@
 #This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 #You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import tkinter #To create the GUI engine.
+import hazard #To place hazards on the board.
+import playboard #We're inheriting from PlayBoard.
 
-import default_board #The main board.
+class DefaultBoard(playboard.PlayBoard):
+	"""
+	Board with default hazards.
+	"""
+	def build_board(self):
+		super().build_board()
 
-if __name__ == "__main__":
-	gui_engine = tkinter.Tk()
-	gui_engine.title("Stratego")
-	window = default_board.DefaultBoard(gui_engine)
-	gui_engine.mainloop()
+		#Place two squares of hazards.
+		self.board[2][4] = hazard.Hazard()
+		self.board[2][5] = hazard.Hazard()
+		self.board[3][4] = hazard.Hazard()
+		self.board[3][5] = hazard.Hazard()
+
+		self.board[6][4] = hazard.Hazard()
+		self.board[6][5] = hazard.Hazard()
+		self.board[7][4] = hazard.Hazard()
+		self.board[7][5] = hazard.Hazard()

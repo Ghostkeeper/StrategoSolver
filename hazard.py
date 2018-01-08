@@ -5,12 +5,7 @@
 #This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 #You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import tkinter #To create the GUI engine.
-
-import default_board #The main board.
-
-if __name__ == "__main__":
-	gui_engine = tkinter.Tk()
-	gui_engine.title("Stratego")
-	window = default_board.DefaultBoard(gui_engine)
-	gui_engine.mainloop()
+class Hazard:
+	"""
+	Marker class to indicate that there is impassable terrain here.
+	"""

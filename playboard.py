@@ -22,7 +22,7 @@ class PlayBoard:
 
 		self.board_settings()
 
-		self.__build_board()
+		self.build_board()
 
 	def board_settings(self):
 		"""
@@ -33,7 +33,7 @@ class PlayBoard:
 		self.width = 10
 		self.height = 10
 
-	def __build_board(self):
+	def build_board(self):
 		"""
 		Creates the play board, initialising everything on it.
 		"""
