@@ -12,6 +12,7 @@ class Rank(enum.Enum):
 	The ranks that a piece can have.
 	"""
 
+	FLAG = -1
 	BOMB = 0
 	SPY = 1
 	SCOUT = 2
@@ -23,4 +24,3 @@ class Rank(enum.Enum):
 	COLONEL = 8
 	GENERAL = 9
 	MARSHALL = 10
-	FLAG = 11
