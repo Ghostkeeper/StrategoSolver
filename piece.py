@@ -12,10 +12,11 @@ class Piece:
 	Represents a piece on the board.
 	"""
 
-	def __init__(self, rank):
+	def __init__(self, rank, is_ai=False):
 		#Ranks are an integer:
 
 		self.rank = rank
+		self.is_ai = is_ai
 
 	def __eq__(self, other):
 		return self.rank == other.rank
