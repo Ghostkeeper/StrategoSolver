@@ -10,6 +10,7 @@ import tkinter #To introduce GUI elements.
 import hazard #To test for hazards.
 import initial_ai #To call an AI for the initial piece placement.
 import initial_spot #To test for the initial spots.
+import piece #To test the pieces and their ranks on the board.
 import play_state #To track the current turn state.
 
 class PlayBoard:
@@ -72,3 +73,26 @@ class PlayBoard:
 				if self.play_state == play_state.PlayState.SETUP:
 					if not isinstance(self.board[x][y], initial_spot.InitialSpot) or self.board[x][y].is_ai:
 						self.board_gui[x][y].config(state=tkinter.DISABLED) #Only allow places where the user can place anything.
+
+				#Display of visible pieces.
+				if isinstance(self.board[x][y], piece.Piece):
+					if not self.board[x][y].is_ai:
+						self.board_gui[x][y].config(text=self._display_rank(self.board[x][y].rank), font=("Sans", "10", "bold"))
+					else: #AI piece.
+						if True: #TODO: Test if the user may see this piece. For debugging we now always want to see it.
+							self.board_gui[x][y].config(text=self._display_rank(self.board[x][y].rank))
+
+	@staticmethod
+	def _display_rank(rank):
+		"""
+		Converts a piece's rank to something that will be displayed to the user.
+		:param piece_rank: The rank of a piece.
+		:return: A character that is displayed for that rank.
+		"""
+		if rank == rank.FLAG:
+			return "F"
+		if rank == rank.BOMB:
+			return "B"
+		if rank == rank.MARSHALL:
+			return "X"
+		return str(rank.value)
