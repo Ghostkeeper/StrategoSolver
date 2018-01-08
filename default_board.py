@@ -36,3 +36,17 @@ class DefaultBoard(playboard.PlayBoard):
 		for x in range(0, len(self.board)):
 			for y in range(0, 4):
 				self.board[x][y] = initial_spot.InitialSpot(is_ai=True)
+
+		#How many of each piece a player gets.
+		self.num_pieces[0] = 6 #Bombs.
+		self.num_pieces[1] = 1 #Spies.
+		self.num_pieces[2] = 8 #Scouts.
+		self.num_pieces[3] = 5 #Miners.
+		self.num_pieces[4] = 4 #Sergeants.
+		self.num_pieces[5] = 4 #Lieutenants.
+		self.num_pieces[6] = 4 #Captains.
+		self.num_pieces[7] = 3 #Majors.
+		self.num_pieces[8] = 2 #Colonels.
+		self.num_pieces[9] = 1 #Generals.
+		self.num_pieces[10] = 1 #Marshalls.
+		self.num_pieces[11] = 1 #Flags.

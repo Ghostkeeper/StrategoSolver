@@ -47,6 +47,7 @@ class PlayBoard:
 		#The board, containing pieces or blocking parts.
 		self.board = [[None for i in range(0, self.height)] for i in range(0, self.width)]
 		self.board_gui = [[None for i in range(0, self.height)] for i in range(0, self.width)]
+		self.num_pieces = [0 for i in range(0, 12)] #Pieces 0 through 11 all get 0 pieces by default.
 
 	def display(self):
 		"""
