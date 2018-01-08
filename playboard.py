@@ -8,6 +8,7 @@
 import tkinter #To introduce GUI elements.
 
 import hazard #To test for hazards.
+import initial_ai #To call an AI for the initial piece placement.
 import initial_spot #To test for the initial spots.
 import play_state #To track the current turn state.
 
@@ -28,6 +29,10 @@ class PlayBoard:
 		self.play_state = play_state.PlayState.SETUP #The game starts with the player setting up their pieces.
 
 		self.build_board()
+
+		setup_ai = initial_ai.InitialAI(self.board)
+		setup_ai.place()
+
 		self.display()
 
 	def board_settings(self):
