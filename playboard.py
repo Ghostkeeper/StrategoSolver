@@ -8,6 +8,7 @@
 import tkinter #To introduce GUI elements.
 
 import hazard #To test for hazards.
+import play_state #To track the current turn state.
 
 class PlayBoard:
 	"""
@@ -23,6 +24,7 @@ class PlayBoard:
 		self.gui_engine = gui_engine
 
 		self.board_settings()
+		self.play_state = play_state.PlayState.SETUP #The game starts with the player setting up their pieces.
 
 		self.build_board()
 		self.display()
@@ -55,5 +57,7 @@ class PlayBoard:
 					continue #Leave this cell empty.
 				self.board_gui[x][y] = tkinter.Button(width=1, height=1, text=" ")
 				self.board_gui[x][y].grid(column=x, row=y)
-				if self.board[x][y] is None:
-					self.board_gui[x][y].config(state=tkinter.DISABLED) #Cells without a piece in it are disabled.
+
+				if self.play_state == play_state.PlayState.TURN:
+					if self.board[x][y] is None:
+						self.board_gui[x][y].config(state=tkinter.DISABLED) #TODO
