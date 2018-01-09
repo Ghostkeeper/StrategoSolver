@@ -24,3 +24,5 @@ class Rank(enum.Enum):
 	COLONEL = 8
 	GENERAL = 9
 	MARSHALL = 10
+
+all_ranks = {Rank.FLAG, Rank.BOMB, Rank.SPY, Rank.SCOUT, Rank.MINER, Rank.SERGEANT, Rank.LIEUTENANT, Rank.CAPTAIN, Rank.MAJOR, Rank.COLONEL, Rank.GENERAL, Rank.MARSHALL}

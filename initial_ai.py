@@ -83,9 +83,27 @@ class InitialAI:
 		safety = self.__distance_to_outside()
 		attack = self.__distance_to_other()
 
-		for iteration in range(0, self.strength):
-			#First make a mapping for every possible location how safe pieces are when they are placed there.
-			pass #TODO: Place pieces and recompute safety (and other measurements).
+		for iteration in range(0, 1):#self.strength):
+			rankings = self.__compute_fitness(safety, attack)
+
+	def __compute_fitness(self, safety, attack):
+		"""
+		Computes for every rank how fit a piece is to place there.
+		:param safety: The safety of the cell according to the current set-up.
+		:param attack: The attack of a cell according to the current set-up.
+		Lower is better.
+		:return: A dictionary of boards, one for each rank, that contain a float
+		for every cell that indicates how well a piece with that rank would be
+		placed in that cell.
+		"""
+		rankings = {}
+		for current_rank in rank.all_ranks:
+			rankings[current_rank] = [[0.0 for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
+			for x in range(0, len(self.board)):
+				for y in range(0, len(self.board[x])):
+					if isinstance(self.board[x][y], initial_spot.InitialSpot) and self.board[x][y].is_ai:
+						rankings[current_rank][x][y] = self.protect_value[current_rank] * safety[x][y] + self.offense_value[current_rank] / max(attack[x][y], 0.0001)
+		return rankings
 
 	def __distance_to_outside(self):
 		"""
