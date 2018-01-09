@@ -19,7 +19,7 @@ class InitialAI:
 
 		self.strength = 10 #Total number of iterations to compute. More makes a stronger AI but takes longer to compute.
 
-		self.defense_value = {
+		self.defense_value = { #How well each piece defends the pieces behind him.
 			rank.Rank.FLAG: 0.0,
 			rank.Rank.BOMB: 100.0,
 			rank.Rank.SPY: 0.0,
@@ -33,7 +33,7 @@ class InitialAI:
 			rank.Rank.GENERAL: 60.0,
 			rank.Rank.MARSHALL: 90.0
 		}
-		self.offense_value = {
+		self.offense_value = { #How important it is for each piece to be able to attack the enemy.
 			rank.Rank.FLAG: 0.0,
 			rank.Rank.BOMB: 0.0,
 			rank.Rank.SPY: 5.0,
@@ -47,21 +47,21 @@ class InitialAI:
 			rank.Rank.GENERAL: 60.0,
 			rank.Rank.MARSHALL: 90.0
 		}
-		self.scout_value = {
+		self.mobility_value = { #How likely each piece is to get out of the way for other pieces.
 			rank.Rank.FLAG: 0.0,
 			rank.Rank.BOMB: 0.0,
-			rank.Rank.SPY: 0.0,
+			rank.Rank.SPY: 5.0,
 			rank.Rank.SCOUT: 100.0,
-			rank.Rank.MINER: 5.0,
+			rank.Rank.MINER: 15.0,
 			rank.Rank.SERGEANT: 75.0,
 			rank.Rank.LIEUTENANT: 70.0,
 			rank.Rank.CAPTAIN: 50.0,
-			rank.Rank.MAJOR: 20.0,
-			rank.Rank.COLONEL: 15.0,
-			rank.Rank.GENERAL: 10.0,
-			rank.Rank.MARSHALL: 8.0
+			rank.Rank.MAJOR: 50.0,
+			rank.Rank.COLONEL: 50.0,
+			rank.Rank.GENERAL: 60.0,
+			rank.Rank.MARSHALL: 70.0
 		}
-		self.protect_value = {
+		self.protect_value = { #How important it is to protect each piece.
 			rank.Rank.FLAG: 1000.0,
 			rank.Rank.BOMB: 0.0,
 			rank.Rank.SPY: 60.0,
