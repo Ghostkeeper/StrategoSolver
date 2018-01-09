@@ -81,6 +81,7 @@ class InitialAI:
 		Places the pieces on the board for the AI player.
 		"""
 		safety = self.__distance_to_outside()
+		attack = self.__distance_to_other()
 
 		for iteration in range(0, self.strength):
 			#First make a mapping for every possible location how safe pieces are when they are placed there.
@@ -88,7 +89,7 @@ class InitialAI:
 
 	def __distance_to_outside(self):
 		"""
-		Computes for every cell the distance is to a place that will not be
+		Computes for every cell the distance it is to a place that will not be
 		occupied by the AI's initial set-up.
 		:return: A grid of floats representing that distance.
 		"""
@@ -110,6 +111,53 @@ class InitialAI:
 					if x < len(self.board) - 1 and isinstance(self.board[x + 1][y], initial_spot.InitialSpot) and self.board[x + 1][y].is_ai:
 						border.add((x + 1, y))
 					if y < len(self.board[x]) - 1 and isinstance(self.board[x][y + 1], initial_spot.InitialSpot) and self.board[x][y + 1].is_ai:
+						border.add((x, y + 1))
+
+		current_distance = 1.0
+		while len(border) > 0:
+			next_border = set()
+			for x, y in border:
+				if isinstance(self.board[x][y], hazard.Hazard):
+					continue
+				if current_distance < distances[x][y]:
+					distances[x][y] = current_distance
+					computed[x][y] = True
+					if x > 0 and not computed[x - 1][y]:
+						next_border.add((x - 1, y))
+					if y > 0 and not computed[x][y - 1]:
+						next_border.add((x, y - 1))
+					if x < len(self.board) - 1 and not computed[x + 1][y]:
+						next_border.add((x + 1, y))
+					if y < len(self.board[x]) - 1 and not computed[x][y + 1]:
+						next_border.add((x, y + 1))
+			border = next_border
+			current_distance += 1.0
+
+		return distances
+
+	def __distance_to_other(self):
+		"""
+		Computes for every cell the distance it is to the enemy.
+		:return: A grid of floats representing that distance.
+		"""
+		distances = [[0.0 + len(self.board[x]) + len(self.board) for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
+		computed = [[False for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
+
+		border = set()
+		for x in range(0, len(self.board)):
+			for y in range(0, len(self.board[x])):
+				if isinstance(self.board[x][y], hazard.Hazard):
+					continue
+				if isinstance(self.board[x][y], initial_spot.InitialSpot) and not self.board[x][y].is_ai: #Initial spot of the player.
+					distances[x][y] = 0
+					computed[x][y] = True
+					if x > 0 and (not isinstance(self.board[x - 1][y], initial_spot.InitialSpot) or self.board[x - 1][y].is_ai):
+						border.add((x - 1, y))
+					if y > 0 and (not isinstance(self.board[x][y - 1], initial_spot.InitialSpot) or self.board[x][y - 1].is_ai):
+						border.add((x, y - 1))
+					if x < len(self.board) - 1 and (not isinstance(self.board[x + 1][y], initial_spot.InitialSpot) or self.board[x + 1][y].is_ai):
+						border.add((x + 1, y))
+					if y < len(self.board[x]) - 1 and (not isinstance(self.board[x][y + 1], initial_spot.InitialSpot) or self.board[x][y + 1].is_ai):
 						border.add((x, y + 1))
 
 		current_distance = 1.0
