@@ -31,7 +31,7 @@ class PlayBoard:
 
 		self.build_board()
 
-		setup_ai = initial_ai.InitialAI(self.board)
+		setup_ai = initial_ai.InitialAI(self)
 		setup_ai.place()
 
 		self.display()

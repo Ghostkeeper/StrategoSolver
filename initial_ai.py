@@ -7,6 +7,7 @@
 
 import hazard #To find impassable cells.
 import initial_spot #To find the places where a piece can be placed.
+import piece #To create pieces for placement on the board.
 import rank #To add knowledge about the function of each rank.
 
 class InitialAI:
@@ -14,8 +15,9 @@ class InitialAI:
 	AI which places the pieces on the board for the start position.
 	"""
 
-	def __init__(self, board):
-		self.board = board
+	def __init__(self, playboard):
+		self.board = playboard.board
+		self.playboard = playboard
 
 		self.strength = 10 #Total number of iterations to compute. More makes a stronger AI but takes longer to compute.
 
@@ -83,8 +85,17 @@ class InitialAI:
 		safety = self.__distance_to_outside()
 		attack = self.__distance_to_other()
 
+		new_board = [[None for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
 		for iteration in range(0, 1):#self.strength):
-			rankings = self.__compute_fitness(safety, attack)
+			fitness = self.__compute_fitness(safety, attack)
+			new_board = self.__place_pieces(fitness)
+
+		#Apply the best board to the real play board.
+		for x in range(0, len(self.board)):
+			for y in range(0, len(self.board[x])):
+				if isinstance(new_board[x][y], piece.Piece):
+					self.board[x][y] = new_board[x][y]
+		self.playboard.display()
 
 	def __compute_fitness(self, safety, attack):
 		"""
@@ -98,7 +109,7 @@ class InitialAI:
 		"""
 		rankings = {}
 		for current_rank in rank.all_ranks:
-			rankings[current_rank] = [[0.0 for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
+			rankings[current_rank] = [[-99999999999999999 for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
 			for x in range(0, len(self.board)):
 				for y in range(0, len(self.board[x])):
 					if isinstance(self.board[x][y], initial_spot.InitialSpot) and self.board[x][y].is_ai:
@@ -199,3 +210,38 @@ class InitialAI:
 			current_distance += 1.0
 
 		return distances
+
+	def __place_pieces(self, fitness):
+		"""
+		Places pieces according to what gives the total highest fitness.
+
+		This is a greedy algorithm that places the piece with the highest
+		fitness on the cell with the highest fitness for that piece first.
+		:param fitness: For each rank a grid of cells indicating the fitness for
+		a piece with that rank in that cell.
+		:return: A board configuration filled with pieces for the AI.
+		"""
+		placement = [[None for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
+		pieces_left = self.playboard.num_pieces.copy()
+		total_pieces_left = sum(pieces_left.values())
+
+		#Place each piece individually.
+		while total_pieces_left > 0:
+			best_rank = None
+			best_place = (-1, -1)
+			best_value = -9999999999999999
+			for x in range(0, len(self.board)):
+				for y in range(0, len(self.board)):
+					for current_rank in rank.all_ranks:
+						if pieces_left[current_rank] > 0:
+							if fitness[current_rank][x][y] > best_value:
+								best_value = fitness[current_rank][x][y]
+								best_rank = current_rank
+								best_place = (x, y)
+			print(best_rank, "goes to", best_place[0], best_place[1], "with value", best_value)
+			placement[best_place[0]][best_place[1]] = piece.Piece(best_rank, is_ai=True)
+			pieces_left[best_rank] -= 1
+			total_pieces_left -= 1
+			for current_rank in rank.all_ranks: #Don't place another piece there.
+				fitness[current_rank][best_place[0]][best_place[1]] = -99999999999999999
+		return placement
