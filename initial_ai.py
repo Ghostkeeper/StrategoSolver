@@ -5,6 +5,8 @@
 #This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 #You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import hazard #To find impassable cells.
+import initial_spot #To find the places where a piece can be placed.
 import rank #To add knowledge about the function of each rank.
 
 class InitialAI:
@@ -90,6 +92,44 @@ class InitialAI:
 		occupied by the AI's initial set-up.
 		:return: A grid of floats representing that distance.
 		"""
-		safety = [[0 for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
-		#TODO: Breadth-first search to find these distances.
-		return safety
+		distances = [[0.0 + len(self.board[x]) + len(self.board) for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
+		computed = [[False for y in range(0, len(self.board[x]))] for x in range(0, len(self.board))]
+
+		border = set()
+		for x in range(0, len(self.board)):
+			for y in range(0, len(self.board[x])):
+				if isinstance(self.board[x][y], hazard.Hazard):
+					continue
+				if not isinstance(self.board[x][y], initial_spot.InitialSpot) or not self.board[x][y].is_ai: #Not allowed to place.
+					distances[x][y] = 0
+					computed[x][y] = True
+					if x > 0 and isinstance(self.board[x - 1][y], initial_spot.InitialSpot) and self.board[x - 1][y].is_ai:
+						border.add((x - 1, y))
+					if y > 0 and isinstance(self.board[x][y - 1], initial_spot.InitialSpot) and self.board[x][y - 1].is_ai:
+						border.add((x, y - 1))
+					if x < len(self.board) - 1 and isinstance(self.board[x + 1][y], initial_spot.InitialSpot) and self.board[x + 1][y].is_ai:
+						border.add((x + 1, y))
+					if y < len(self.board[x]) - 1 and isinstance(self.board[x][y + 1], initial_spot.InitialSpot) and self.board[x][y + 1].is_ai:
+						border.add((x, y + 1))
+
+		current_distance = 1.0
+		while len(border) > 0:
+			next_border = set()
+			for x, y in border:
+				if isinstance(self.board[x][y], hazard.Hazard):
+					continue
+				if current_distance < distances[x][y]:
+					distances[x][y] = current_distance
+					computed[x][y] = True
+					if x > 0 and not computed[x - 1][y]:
+						next_border.add((x - 1, y))
+					if y > 0 and not computed[x][y - 1]:
+						next_border.add((x, y - 1))
+					if x < len(self.board) - 1 and not computed[x + 1][y]:
+						next_border.add((x + 1, y))
+					if y < len(self.board[x]) - 1 and not computed[x][y + 1]:
+						next_border.add((x, y + 1))
+			border = next_border
+			current_distance += 1.0
+
+		return distances
