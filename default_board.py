@@ -14,7 +14,11 @@ class DefaultBoard(playboard.PlayBoard):
 	"""
 	Board with default hazards.
 	"""
+
 	def build_board(self):
+		"""
+		Creates the configuration of this board.
+		"""
 		super().build_board()
 
 		#Place two squares of hazards.
